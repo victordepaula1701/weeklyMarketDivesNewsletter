@@ -255,3 +255,24 @@ function sendEmail(){
 }
 ```
 
+## Next steps
+
+One of the next steps I'm already applying to the project. That was to create an API with Google Spreadsheets, before I was using the code below to save the data that I'm scraping on the Google Sheets. 
+
+```python
+from google.colab import auth
+auth.authenticate_user()
+import gspread
+from oauth2client.client import GoogleCredentials
+
+gc = gspread.authorize(GoogleCredentials.get_application_default())
+ss = gc.open_by_key('SPREADSHEET ID')
+ws = ss.worksheet("SHEET NAME")
+set_with_dataframe(ws, df)
+```
+
+As some websites I couldn't scrape the data, but I found some of them on twitter one of the next steps is to use the Twitter API to get this data and add a new section with some of these tweets. 
+
+Another section that I'm working to include is about the content that the competitor's to keep the track of what they are creating and promoting. 
+
+If you read this until here I hope that you enjoyed my personal newsletter and I hope that could help you in your work or projects. 
