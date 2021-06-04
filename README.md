@@ -48,7 +48,9 @@ The Brazilian Educational & Language Travel Association or BELTA is an associati
 
 Founded in 1992, BELTA is recognized globally and all the associates represent more than 75% of the global educational market. 
 
-###Python code:
+Now that we contextualized everything let's to the codes: 
+
+### Python code:
 
 ```python
 !pip install newspaper3k
@@ -84,8 +86,6 @@ url="http://www.belta.org.br/category/noticias/"
 data = requests.get(url).content
 
 soup = BeautifulSoup(data,'html.parser')
-
-articleBelta = soup.find_all ('div', class_ = ['article-detail'])
 
 articleDate = []
 ul = soup.find_all ('ul', class_ = ['author-meta'])
@@ -218,7 +218,7 @@ style='min-width:100%; width:100%; height:auto; padding-bottom:5px' /></td>
 </html>
 ```
 
-###Javascript code: 
+### Javascript code: 
 
 ```javascript
 function sendEmail(){
@@ -254,3 +254,4 @@ function sendEmail(){
   }
 }
 ```
+
