@@ -48,4 +48,90 @@ The Brazilian Educational & Language Travel Association or BELTA is an associati
 
 Founded in 1992, BELTA is recognized globally and all the associates represent more than 75% of the global educational market. 
 
+```python
+!pip install newspaper3k
+!pip install gspread oauth2client
 
+from bs4 import BeautifulSoup
+import requests
+import pandas as pd
+import re
+import datetime
+from datetime import date, timedelta
+import newspaper
+from newspaper import Article
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+from  gspread_dataframe  import  get_as_dataframe ,  set_with_dataframe
+
+#Google Spreadsheet API connection
+scope = ['https://spreadsheets.google.com/feeds']
+creds = ServiceAccountCredentials.from_json_keyfile_name('\keys.json', scope)
+client = gspread.authorize(creds)
+
+#calculating and defining the time range
+today = pd.to_datetime('today').floor('d')
+dateRange = today - pd.Timedelta(7, unit='D')
+dateRangeConverted = dateRange.strftime('%Y-%m-%d')
+date = datetime.datetime.strptime(dateRangeConverted, "%Y-%m-%d").date()
+strpTimeDate = date.strftime('%Y-%m-%d')
+
+#Start of the web scraping code
+url="http://www.belta.org.br/category/noticias/"
+
+data = requests.get(url).content
+
+soup = BeautifulSoup(data,'html.parser')
+
+articleBelta = soup.find_all ('div', class_ = ['article-detail'])
+
+articleDate = []
+ul = soup.find_all ('ul', class_ = ['author-meta'])
+for item in ul:
+    dateStr = item.find('li').text.strip()
+    dateToConvert = datetime.datetime.strptime(dateStr, '%d/%m/%Y')
+    dateConverted = dateToConvert.strftime('%Y-%m-%d')
+    articleDate.append(dateConverted)
+
+articleUrls = []    
+for getUrl in soup.find_all ('h1', class_ = ['article-title']):
+  for a in getUrl.find_all ('a'):
+    link = a.get('href')
+    articleUrls.append(link)
+
+dfBeltaNews = pd.DataFrame(articleDate, columns=['Date'])
+dfBeltaNews.insert(loc=1, column='URL', value=articleUrls)
+
+dates = pd.to_datetime(pd.Series(dfBeltaNews['Date']), format = '%Y-%m-%d')
+dates.apply(lambda x: x.strftime('%Y-%m-%d'))
+
+dateFilter = dfBeltaNews.loc[(dates >= strpTimeDate)]
+urlsList = list(dateFilter["URL"])
+
+articleTitle = []
+articleContent = []
+
+for url in urlsList:
+  article = Article(url)
+  article.download()
+  article.parse()
+  articleTitle.append(article.title)
+  articleContent.append(article.text[:300]+"...")
+
+articleAuthor = []
+for i in urlsList:
+  articleAuthor.append('BELTA Notícias')    
+
+dfBeltaNews = dateFilter
+dfBeltaNews.insert(loc=2, column='Title', value=articleTitle)
+dfBeltaNews.insert(loc=3, column='Content', value=articleContent)
+dfBeltaNews.insert(loc=4, column='Author', value=articleAuthor)
+dfBeltaNews
+
+#Storing the data that I collect on my spreadsheet
+ss = client.open_by_key('SPREADSHEET ID')
+ws = ss.worksheet("SHEET NAME")
+set_with_dataframe(ws, dfBeltaNews)
+```
+
+```python
