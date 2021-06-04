@@ -48,6 +48,8 @@ The Brazilian Educational & Language Travel Association or BELTA is an associati
 
 Founded in 1992, BELTA is recognized globally and all the associates represent more than 75% of the global educational market. 
 
+###Python code:
+
 ```python
 !pip install newspaper3k
 !pip install gspread oauth2client
@@ -134,4 +136,86 @@ ws = ss.worksheet("SHEET NAME")
 set_with_dataframe(ws, dfBeltaNews)
 ```
 
-```python
+```
+
+### HTML template
+```HTML
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link
+		href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap"
+		rel="stylesheet">
+</head>
+
+<body style="background-color:#000000">
+	<table class="table" cellpadding='0' cellspacing='0' align='center'
+		style="border:none; width:500px; height:100%; width:100%; background-color:#000000">
+		<tr>
+			<td float="center" valign="top">
+				<table id="emailContainer" cellpadding="0" cellspacing="0" align='center'
+					style="max-width:500px; border:none; width:100%">
+					<tr>
+						<td>
+
+							<!--Header-->
+							<table id="emailHeader" cellpadding="0" cellspacing="0" align='center'
+								style="border:none; width:100%">
+								<tr>
+									<th scope="col" width='500px' align='center'>
+										<h1
+											style="text-transform: uppercase; font-weight: 800; text-align:center; font-family:Open Sans, sans-serif; color:#F1C40F;">
+											Weekly Market Dives</h1>
+										<p
+											style="font-size:14px; text-align:center; font-family:Open Sans, sans-serif; color:#F0F0F0;">
+											A weekly summary of the news about the study abroad market to read with a
+											good cup of coffee and start your week informed!</p>
+									</th>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<!--Content-->
+							<table id="Content" cellpadding="0" cellspacing="0"
+								style="background-color:#000000; border:none; width:100%">
+								<tr>
+									<? newsValues.forEach(r => { ?>
+								<tr>
+									<td style="font-size:14px; font-family:Open Sans, sans-serif; color:#F0F0F0; text-align:left;">
+										<p>
+											<span style="font-size:16px; color:#F1C40F; font-family:Open Sans, sans-serif; text-transform: uppercase; font-weight: 400; text-align:left;">
+<b><?= r[2] ?></b></span>
+											<?= r[7] ?><?= r[0] ?><?= r[8] ?><?= r[9] ?><?= r[3] ?>
+											<?= r[5] ?><?= r[4] ?>
+											<a href="<?= r[1] ?>"><?= r[6] ?></a>
+										</p>
+									</td>
+								</tr>
+								<? }) ?>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td class="footer" float="center" valign="top" align='center' background-color='#000000'>
+				<!--Footer-->
+				<table id="emailFooter" cellpadding="0" cellspacing="0" align='center' style="border:none; width:100%">
+					<tr>
+            <td float="center" valign="top"><img src="https://victorsantos.com.br/docs/img/Footer-Newsletter-v1.png" alt="footer" class="center"
+style='min-width:100%; width:100%; height:auto; padding-bottom:5px' /></td>
+					</tr>
+	</table>
+	</td>
+	</tr>
+	</table>
+	</td>
+	</tr>
+	</table>
+</body>
+
+</html>
+```
