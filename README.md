@@ -254,6 +254,9 @@ function sendEmail(){
   }
 }
 ```
+### The Layout
+![News layout](images/News_Layout_White.png)
+
 
 ## Next steps
 
